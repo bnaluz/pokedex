@@ -1,5 +1,5 @@
-const { commerce } = require("faker");
-const { Pokemon } = require("./models");
+const { commerce } = require('faker');
+const { Pokemon } = require('./models');
 
 function random100() {
   return Math.floor(Math.random() * 100) + 1;
@@ -7,10 +7,10 @@ function random100() {
 
 function randomImage() {
   const images = [
-    "/images/pokemon_berry.svg",
-    "/images/pokemon_egg.svg",
-    "/images/pokemon_potion.svg",
-    "/images/pokemon_super_potion.svg",
+    '/images/pokemon_berry.svg',
+    '/images/pokemon_egg.svg',
+    '/images/pokemon_potion.svg',
+    '/images/pokemon_super_potion.svg',
   ];
   const index = Math.floor(Math.random() * images.length);
   return images[index];
@@ -29,21 +29,18 @@ function* generateItems() {
 
 async function create(details) {
   details.items = [...generateItems()];
-  const pokemon = await Pokemon.create(details, { include: ["items"] });
+  const pokemon = await Pokemon.create(details, { include: ['items'] });
   return pokemon.id;
 }
 
 async function update(details) {
   const id = details.id;
   delete details.id;
-  await Pokemon.update(
-    details,
-    {
-      where: { id },
-      returning: true,
-      plain: true,
-    }
-  );
+  await Pokemon.update(details, {
+    where: { id },
+    returning: true,
+    plain: true,
+  });
   return id;
 }
 
@@ -52,13 +49,13 @@ async function list() {
 }
 
 async function one(id) {
-  return await Pokemon.scope("detailed").findByPk(id);
+  return await Pokemon.scope('detailed').findByPk(id);
 }
 
 async function random() {
-  const pokemon = await Pokemon.scope(["random", "opponent"]).findAll();
+  const pokemon = await Pokemon.scope(['random', 'opponent']).findAll();
   const weightedSum = pokemon.reduce((sum, { encounterRate }) => {
-    return sum + Number(encounterRate)
+    return sum + Number(encounterRate);
   }, 0);
   let randomSum = Math.random() * weightedSum;
   let chosenId;
@@ -73,8 +70,8 @@ async function random() {
 }
 
 async function battle(allyId, opponentId) {
-  const ally = await Pokemon.scope("ally").findByPk(allyId);
-  const opponent = await Pokemon.scope("opponent").findByPk(opponentId);
+  const ally = await Pokemon.scope('ally').findByPk(allyId);
+  const opponent = await Pokemon.scope('opponent').findByPk(opponentId);
   if (!ally) throw new Error('Ally Pokemon not found');
   if (!opponent) throw new Error('Opponent Pokemon not found');
 

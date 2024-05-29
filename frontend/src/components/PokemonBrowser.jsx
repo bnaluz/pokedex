@@ -10,7 +10,7 @@ const PokemonBrowser = () => {
   const { pokemonId } = useParams();
   const allPokemon = useSelector((state) => state.pokemon);
   const pokemon = allPokemon.list.map((pokemonId) => allPokemon[pokemonId]);
-  console.log(pokemon);
+  // console.log(pokemon);
   const [showForm, setShowForm] = useState(false);
 
   const dispatch = useDispatch();

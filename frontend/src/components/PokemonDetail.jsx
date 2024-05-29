@@ -1,19 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import PokemonItems from './PokemonItems';
 import EditPokemonForm from './EditPokemonForm';
 import ItemForm from './ItemForm';
+import { getPokemonDetail } from '../store/pokemon';
 
 const PokemonDetail = () => {
   const { pokemonId } = useParams();
-  const pokemon = useSelector(state => state.pokemon[pokemonId]);
+  const pokemon = useSelector((state) => state.pokemon[pokemonId]);
   const [showEditPokeForm, setShowEditPokeForm] = useState(false);
   const [editItemId, setEditItemId] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setShowEditPokeForm(false);
     setEditItemId(null);
+  }, [pokemonId]);
+
+  useEffect(() => {
+    dispatch(getPokemonDetail(pokemonId));
   }, [pokemonId]);
 
   if (!pokemon || !pokemon.moves) {
@@ -24,10 +30,7 @@ const PokemonDetail = () => {
 
   if (editItemId) {
     content = (
-      <ItemForm
-        itemId={editItemId}
-        hideForm={() => setEditItemId(null)}
-      />
+      <ItemForm itemId={editItemId} hideForm={() => setEditItemId(null)} />
     );
   } else if (showEditPokeForm && pokemon.captured) {
     content = (
@@ -57,9 +60,10 @@ const PokemonDetail = () => {
             <li>
               <b>Moves</b>
               <ul>
-                {pokemon.moves && pokemon.moves.map((move, i) => (
-                  <li key={move+i}>{move}</li>
-                ))}
+                {pokemon.moves &&
+                  pokemon.moves.map((move, i) => (
+                    <li key={move + i}>{move}</li>
+                  ))}
               </ul>
             </li>
           </ul>
@@ -96,11 +100,10 @@ const PokemonDetail = () => {
         ></div>
         <div>
           <h1 className="bigger">{pokemon.name}</h1>
-          {(!showEditPokeForm && pokemon.captured) && (
+          {!showEditPokeForm && pokemon.captured && (
             <button onClick={() => setShowEditPokeForm(true)}>Edit</button>
           )}
         </div>
-
       </div>
       {content}
     </div>
