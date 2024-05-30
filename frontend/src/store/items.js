@@ -25,6 +25,20 @@ const remove = (itemId, pokemonId) => ({
   pokemonId
 });
 
+//*THUNKS
+export const getPokemonItems = (id) => async (dispatch) => {
+  const response = await fetch(`/api/pokemon/${id}/items`);
+
+  if (response.ok) {
+    const items = await response.json();
+    dispatch(load(items));
+    return items;
+  }
+};
+
+
+
+
 const initialState = {};
 
 const itemsReducer = (state = initialState, action) => {
@@ -45,7 +59,7 @@ const itemsReducer = (state = initialState, action) => {
       return newState;
     }
     case ADD_ITEM:
-    case UPDATE_ITEM: 
+    case UPDATE_ITEM:
       return {
         ...state,
         [action.item.id]: action.item

@@ -55,7 +55,6 @@ export const createPokemon = (payload) => async (dispatch) => {
     },
     body: JSON.stringify(payload),
   });
-
   if (response.ok) {
     const newPokemon = await response.json();
     // dispatch(addOnePokemon(newPokemon));  //figure out if this completely unnecessary
