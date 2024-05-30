@@ -20,7 +20,7 @@ const PokemonDetail = () => {
 
   useEffect(() => {
     dispatch(getPokemonDetail(pokemonId));
-  }, [pokemonId]);
+  }, [pokemonId, dispatch]);
 
   if (!pokemon || !pokemon.moves) {
     return null;

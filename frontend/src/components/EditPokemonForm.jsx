@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPokemonTypes } from '../store/pokemon';
+import { editPokemon } from '../store/pokemon';
+import { useNavigate } from 'react-router-dom';
 
 const EditPokemonForm = ({ pokemon, hideForm }) => {
   const pokeTypes = useSelector(state => state.pokemon.types);
@@ -23,6 +25,7 @@ const EditPokemonForm = ({ pokemon, hideForm }) => {
   const updateType = (e) => setType(e.target.value);
   const updateMove1 = (e) => setMove1(e.target.value);
   const updateMove2 = (e) => setMove2(e.target.value);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getPokemonTypes());
@@ -30,25 +33,30 @@ const EditPokemonForm = ({ pokemon, hideForm }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const payload = {
+      ...pokemon,
+      number,
+      attack,
+      defense,
+      imageUrl,
+      name,
+      type,
+      move1,
+      move2,
+      moves: [move1, move2]
+    };
 
-    // const payload = {
-    //   ...pokemon,
-    //   number,
-    //   attack,
-    //   defense,
-    //   imageUrl,
-    //   name,
-    //   type,
-    //   move1,
-    //   move2,
-    //   moves: [move1, move2]
-    // };
-    
-    let updatedPokemon;
+    let updatedPokemon = await dispatch(editPokemon(payload));
+    console.log(updatedPokemon);
+
     if (updatedPokemon) {
+      navigate(`/pokemon/${updatedPokemon.id}`);
       hideForm();
     }
+
   };
+
+
 
   const handleCancelClick = (e) => {
     e.preventDefault();

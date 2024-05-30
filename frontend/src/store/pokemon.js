@@ -58,7 +58,25 @@ export const createPokemon = (payload) => async (dispatch) => {
 
   if (response.ok) {
     const newPokemon = await response.json();
+    // dispatch(addOnePokemon(newPokemon));  //figure out if this completely unnecessary
     return newPokemon;
+  }
+};
+
+export const editPokemon = (payload) => async (dispatch) => {
+  const {number} = payload;
+  const response = await fetch(`/api/pokemon/${number}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (response.ok) {
+    const editedPokemon = await response.json();
+    dispatch(addOnePokemon(editedPokemon));
+    return editedPokemon;
   }
 };
 

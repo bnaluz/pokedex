@@ -17,7 +17,7 @@ const PokemonBrowser = () => {
 
   useEffect(() => {
     dispatch(getPokemon());
-  }, []);
+  }, [dispatch]);
 
   return (
     <main>
